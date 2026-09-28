@@ -1,0 +1,123 @@
+document.addEventListener("DOMContentLoaded", () => {
+  // Elementos DOM
+  const form = document.getElementById("generator-form");
+  const generateBtn = document.getElementById("generate-btn");
+  const creditsDisplay = document.getElementById("credits-count");
+  const outputPlaceholder = document.getElementById("output-placeholder");
+  const outputContent = document.getElementById("output-content");
+  
+  const resPlatform = document.getElementById("res-platform");
+  const resHook = document.getElementById("res-hook");
+  const resScript = document.getElementById("res-script");
+  const resCta = document.getElementById("res-cta");
+
+  const copyBtn = document.getElementById("copy-btn");
+  const saveBtn = document.getElementById("save-btn");
+  const savedList = document.getElementById("saved-list");
+  const savedCount = document.getElementById("saved-count");
+
+  // Sistema de Créditos Freemium
+  let credits = parseInt(localStorage.getItem("viralspark_credits")) || 5;
+  creditsDisplay.textContent = credits;
+
+  // Lista de Ideas Guardadas
+  let savedIdeas = JSON.parse(localStorage.getItem("viralspark_saved")) || [];
+  renderSavedIdeas();
+
+  // Generador de Contenido
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    if (credits <= 0) {
+      alert("⚠️ Has alcanzado tu límite diario de 5 créditos gratuitos.");
+      return;
+    }
+
+    const niche = document.getElementById("niche").value;
+    const platform = document.getElementById("platform").value;
+    const topic = document.getElementById("topic").value;
+
+    // Reducir créditos
+    credits--;
+    localStorage.setItem("viralspark_credits", credits);
+    creditsDisplay.textContent = credits;
+
+    // Generar Idea
+    const idea = generateViralIdea(niche, platform, topic);
+
+    // Mostrar Resultados
+    resPlatform.textContent = idea.platform;
+    resHook.textContent = idea.hook;
+    resScript.textContent = idea.script;
+    resCta.textContent = idea.cta;
+
+    outputPlaceholder.classList.add("hidden");
+    outputContent.classList.remove("hidden");
+  });
+
+  // Algoritmo Generador
+  function generateViralIdea(niche, platform, topic) {
+    const hooks = [
+      `"Casi nadie sabe esto sobre ${topic}, pero te cambiará la vida..."`,
+      `"Deja de cometer este gran error si quieres mejorar en ${topic}."`,
+      `"3 secretos ocultos sobre ${topic} que las marcas no quieren que sepas."`
+    ];
+
+    const scripts = [
+      `1. Muestra el problema común con ${topic}.\n2. Revela la solución inesperada en 10 segundos.\n3. Da un ejemplo práctico que puedan aplicar hoy mismo.`,
+      `1. Captura atención mostrando un resultado sorprendente relacionado con ${topic}.\n2. Desglosa los 3 pasos simples para conseguirlo.`
+    ];
+
+    const ctas = [
+      `"Guarda este vídeo antes de que lo borren y sígueme para más."`,
+      `"Comenta '${topic.toUpperCase()}' y te respondo con una guía rápida."`
+    ];
+
+    return {
+      platform,
+      topic,
+      hook: hooks[Math.floor(Math.random() * hooks.length)],
+      script: scripts[Math.floor(Math.random() * scripts.length)],
+      cta: ctas[Math.floor(Math.random() * ctas.length)]
+    };
+  }
+
+  // Copiar al portapapeles
+  copyBtn.addEventListener("click", () => {
+    const fullText = `🪝 HOOK: ${resHook.textContent}\n\n🎬 GUIÓN:\n${resScript.textContent}\n\n💬 CTA: ${resCta.textContent}`;
+    navigator.clipboard.writeText(fullText);
+    alert("¡Guión copiado al portapapeles! 📋");
+  });
+
+  // Guardar Idea
+  saveBtn.addEventListener("click", () => {
+    const newIdea = {
+      id: Date.now(),
+      platform: resPlatform.textContent,
+      hook: resHook.textContent,
+      script: resScript.textContent,
+      cta: resCta.textContent
+    };
+
+    savedIdeas.push(newIdea);
+    localStorage.setItem("viralspark_saved", JSON.stringify(savedIdeas));
+    renderSavedIdeas();
+    alert("¡Idea guardada con éxito! ⭐");
+  });
+
+  // Renderizar Favoritos
+  function renderSavedIdeas() {
+    savedCount.textContent = savedIdeas.length;
+    if (savedIdeas.length === 0) {
+      savedList.innerHTML = `<p class="empty-msg">Aún no has guardado ninguna idea.</p>`;
+      return;
+    }
+
+    savedList.innerHTML = savedIdeas.map(idea => `
+      <div class="saved-item">
+        <h4>${idea.platform}</h4>
+        <p><strong>Hook:</strong> ${idea.hook}</p>
+      </div>
+    `).join("");
+  }
+});
