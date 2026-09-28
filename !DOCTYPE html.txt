@@ -1,110 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ViralSpark - Generador de Guiones Virales</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ViralSpark - Photo & Copy Studio for Vinted & Wallapop</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <div class="app-container">
+        <header>
+            <div class="logo-badge">🔥 ViralSpark Engine</div>
+            <h1>Photo & Copy Studio para Vinted & Wallapop</h1>
+            <p>Transforma fotos aburridas en contenido viral que arrasa y se vende en minutos.</p>
+        </header>
 
-  <div class="container">
-    <!-- Header / Navbar -->
-    <header class="header">
-      <div class="logo">
-        <span class="icon">⚡</span>
-        <h1>Viral<span>Spark</span></h1>
-      </div>
-      <div class="credits-badge">
-        <span id="credits-count">5</span>/5 Créditos hoy
-      </div>
-    </header>
+        <main class="main-content">
+            <!-- Panel Izquierdo: Estudio Fotográfico -->
+            <section class="editor-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-camera-retro"></i> Estudio de Imagen</h3>
+                    <span class="badge">Paso 1</span>
+                </div>
 
-    <!-- Main App Grid -->
-    <main class="main-grid">
-      
-      <!-- Panel de Control -->
-      <section class="card form-card">
-        <h2>Crear Contenido Viral</h2>
-        <p class="subtitle">Genera ganchos y guiones optimizados para retención.</p>
+                <div class="upload-box">
+                    <label for="imageInput" class="upload-btn">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Sube la foto de tu prenda
+                    </label>
+                    <input type="file" id="imageInput" accept="image/*" style="display: none;">
+                </div>
 
-        <form id="generator-form">
-          <div class="form-group">
-            <label for="niche">Nicho o Categoria</label>
-            <select id="niche" required>
-              <option value="emprendimiento">Emprendimiento y Negocios</option>
-              <option value="fitness">Fitness y Salud</option>
-              <option value="tecnologia">Tecnología e Inteligencia Artificial</option>
-              <option value="desarrollo">Desarrollo Personal / Estilo de Vida</option>
-              <option value="humor">Humor y Curiosidades</option>
-            </select>
-          </div>
+                <div class="canvas-container">
+                    <p id="placeholderText">Arrastra o selecciona una imagen para activar el motor viral</p>
+                    <canvas id="imageCanvas" style="display: none;"></canvas>
+                </div>
 
-          <div class="form-group">
-            <label for="platform">Plataforma Objetivo</label>
-            <select id="platform" required>
-              <option value="TikTok">TikTok</option>
-              <option value="YouTube Shorts">YouTube Shorts</option>
-              <option value="Instagram Reels">Instagram Reels</option>
-            </select>
-          </div>
+                <div id="toolsSection" class="tools-section disabled">
+                    <h4>🛠️ Optimizadores Flash</h4>
+                    <div class="btn-grid">
+                        <button id="brightenBtn"><i class="fa-solid fa-sun"></i> Luz Pro Viral</button>
+                        <button id="contrastBtn"><i class="fa-solid fa-circle-half-stroke"></i> Contraste HD</button>
+                        <button id="squareBtn"><i class="fa-solid fa-expand"></i> Auto-Formato 1:1</button>
+                    </div>
+                </div>
 
-          <div class="form-group">
-            <label for="topic">Tema o Palabra Clave</label>
-            <input type="text" id="topic" placeholder="Ej: errores al emprender, productividad..." required>
-          </div>
+                <div id="exportSection" class="export-section" style="display: none;">
+                    <button id="downloadBtn" class="primary-btn"><i class="fa-solid fa-download"></i> Descargar Foto Lista para Vender</button>
+                </div>
+            </section>
 
-          <button type="submit" id="generate-btn" class="btn-primary">
-            <span>✨ Generar Guión Viral</span>
-          </button>
-        </form>
-      </section>
+            <!-- Panel Derecho: Motor de IA y Copys Virales -->
+            <section class="info-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-wand-magic-sparkles"></i> ViralSpark AI Copywriter</h3>
+                    <span class="badge ai">IA Activa</span>
+                </div>
 
-      <!-- Panel de Resultado -->
-      <section class="card output-card">
-        <h2>Tu Idea Generada</h2>
-        
-        <div id="output-placeholder" class="placeholder">
-          <p>Llena el formulario y haz clic en generar para ver la magia. 🚀</p>
-        </div>
+                <div class="search-box-container">
+                    <label for="googleSearchInput">🔍 Búsqueda de Referencia de Mercado</label>
+                    <div class="search-input-group">
+                        <input type="text" id="googleSearchInput" placeholder="Ej: Vestido Zara limones talla S...">
+                        <button id="googleSearchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+                    </div>
+                </div>
 
-        <div id="output-content" class="output-content hidden">
-          <div class="badge-platform" id="res-platform">TikTok</div>
-          
-          <div class="result-box">
-            <h3>🪝 El Gancho (Hook - Primeros 3 seg):</h3>
-            <p id="res-hook" class="highlight-text"></p>
-          </div>
+                <div id="recContent" class="smart-box">
+                    <div class="empty-state">
+                        <i class="fa-solid fa-bolt-lightning"></i>
+                        <p>Sube una foto o introduce los datos para generar tu <strong>Hook de Venta</strong> y descripción optimizada con alto índice de conversión.</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
-          <div class="result-box">
-            <h3>🎬 Guión / Estructura del Vídeo:</h3>
-            <p id="res-script"></p>
-          </div>
-
-          <div class="result-box">
-            <h3>💬 Llamada a la Acción (CTA):</h3>
-            <p id="res-cta"></p>
-          </div>
-
-          <div class="actions">
-            <button id="copy-btn" class="btn-secondary">📋 Copiar Guión</button>
-            <button id="save-btn" class="btn-accent">⭐ Guardar Idea</button>
-          </div>
-        </div>
-      </section>
-
-    </main>
-
-    <!-- Galería de Guardados -->
-    <section class="card saved-section">
-      <h2>Ideas Guardadas (<span id="saved-count">0</span>)</h2>
-      <div id="saved-list" class="saved-grid">
-        <p class="empty-msg">Aún no has guardado ninguna idea.</p>
-      </div>
-    </section>
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
